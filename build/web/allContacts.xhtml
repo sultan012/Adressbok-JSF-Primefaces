@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+
+    <h:head>
+        <title>All Contacts</title>
+    </h:head>
+
+
+    <h:body>
+
+        <h:form>
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:dataTable id="contacts" var="contact" value="#{dtSelectionView.contactsList}" 
+
+
+                         editable="true" editMode="cell" widgetVar="contactTable" 
+
+                         emptyMessage="No contacts found with given criteria" filteredValue="#{dtSelectionView.filteredContacts}"
+                         rowKey="#{contact.id}"
+                         selection="#{dtSelectionView.selectedContact}" selectionMode="single">
+
+                <f:facet name="header">
+
+                    <h1 style=" color: red "> All Contacts </h1>  
+
+
+                    <p:outputPanel>
+                        <h:outputText value="Search all fields:  " style=" color: blue" />
+                        <p:inputText id="globalFilter" onkeyup="PF('contactTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                  
+
+                </f:facet>
+                <p:ajax event="rowEdit" listener="#{dtSelectionView.onRowEdit}" update="" />
+                <p:ajax event="rowEditCancel" listener="#{dtSelectionView.onRowCancel}" update="" />
+                <p:ajax event="cellEdit" listener="#{dtSelectionView.onCellEdit}" update="" />
+
+
+                <p:column headerText="Id" filterBy="#{contact.id}" sortBy="#{contact.id}" filterMatchMode="contains">
+                    <h:outputText value="#{contact.id}" />
+                </p:column>
+
+                <p:column headerText="First Name" filterBy="#{contact.firstName}" sortBy="#{contact.firstName}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{contact.firstName}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="modelInput" value="#{contact.firstName}" style="width:96%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Last Name" filterBy="#{contact.lastName}" sortBy="#{contact.lastName}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{contact.lastName}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{contact.lastName}" style="width:96%" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Email" filterBy="#{contact.email}" sortBy="#{contact.email}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{contact.email}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{contact.email}" style="width:96%" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Phone Number" filterBy="#{contact.phone}" sortBy="#{contact.phone}" filterMatchMode="contains">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{contact.phone}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{contact.phone}" style="width:96%" /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+
+            </p:dataTable>
+
+            <p:contextMenu for="contacts">
+                <p:menuitem value="Delete" update="contacts" icon="ui-icon-close" actionListener="#{dtSelectionView.removeContact()}"/>
+                <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>  
+            </p:contextMenu>
+
+            <p style="color: blue">* Cell Editing with Click on the cell.</p>
+            <p style="color: blue">* Delete contact: Right Click on (Id) and click Delete.</p>
+
+
+
+        
+
+            <p:panelGrid id="grid" columns="2" >
+                <f:facet name="header">
+                    <h4 style=" color: red "> Create new contact </h4>   
+                </f:facet>
+
+                <p:outputLabel for="firstName" value="First Name"/>
+                <p:inputText id="firstName" value="#{dtSelectionView.firstName}" required="true"/>
+
+                <p:outputLabel for="lastName" value="Last Name"/>
+                <p:inputText id="lastName" value="#{dtSelectionView.lastName}" required="true"/>
+
+                <p:outputLabel for="email" value="Email"/>
+                <p:inputText id="email" value="#{dtSelectionView.email}"/>
+
+                <p:outputLabel for="phoneNumber" value="Phone Number"/>
+                <p:inputText id="phoneNumber" value="#{dtSelectionView.phone}" required="true"/>
+
+            </p:panelGrid>
+            <p:commandButton  value="Save" action="#{dtSelectionView.addContact()}" update ="contacts grid" icon="ui-icon-disk"></p:commandButton>
+
+
+        </h:form> 
+
+    </h:body> 
+
+</html> 
+
